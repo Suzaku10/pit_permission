@@ -8,8 +8,12 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
     var grantedList = [Bool]()
     var permissionLength: Int?
     var isMultiplePermission: Bool?
+    var permissionList: [String]?
+    
+    var counter: Int = 0
     
     var locationManager:CLLocationManager!
+    var dispatchGroup = DispatchGroup()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "pit_permission", binaryMessenger: registrar.messenger())
@@ -30,13 +34,14 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         } else if (call.method.elementsEqual("requestPermissions")) {
             isMultiplePermission = true
             grantedList = [Bool]()
+            permissionList = [String] ()
             let permissions = call.arguments as? Dictionary<String, [String]>
-            var permissionList: [String]?
             for (_, value) in permissions! {
                 permissionList = value
             }
             
             permissionLength = permissionList?.count
+            grantedList = [Bool](repeating: false, count: permissionLength!)
             requestPermissions(permission: permissionList!, result: result)
         }
     }
@@ -44,22 +49,25 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
     public func requestPermissions(permission: [String],result: @escaping FlutterResult) -> Void {
         let permissionLength = permission.count
         for index in 0..<permissionLength {
-            print(permission[index])
             switch (permission[index]) {
             case "Contact":
-                contactPermission(result: result)
+                contactPermission(result: result, permissionName: permission[index])
                 break
                 
             case "Storage":
-                storagePermission(result: result)
+                storagePermission(result: result, permissionName: permission[index])
                 break
                 
             case "Camera":
-                cameraPermission(result: result)
+                cameraPermission(result: result, permissionName: permission[index])
                 break
                 
             case "Microphone":
-                microphonePermission(result: result)
+                microphonePermission(result: result, permissionName: permission[index])
+                break
+                
+            case "Location":
+                locationPermission(result: result, permissionName: permission[index])
                 break
                 
             default:
@@ -68,78 +76,114 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    public func collectPermissionResult(isGranted: Bool, result: @escaping FlutterResult) -> Void {
+    public func collectPermissionResult(isGranted: Bool, result: @escaping FlutterResult, permissionName: String) -> Void {
         if isMultiplePermission! {
-            grantedList.append(isGranted)
+            let permissionLength = permissionList!.count
+            for index in 0..<permissionLength {
+                if permissionList![index] == permissionName {
+                    grantedList[index] = isGranted
+                    counter += 1
+                }
+            }
         } else {
             result(isGranted)
         }
         
-        if grantedList.count == permissionLength && isMultiplePermission! {
+        if counter == permissionLength && isMultiplePermission! {
             result(grantedList)
         }
     }
     
-    public func storagePermission(result: @escaping FlutterResult) -> Void {
+    public func storagePermission(result: @escaping FlutterResult, permissionName: String) -> Void {
         PHPhotoLibrary.requestAuthorization { status in
             switch status {
             case .authorized:
-                self.collectPermissionResult(isGranted: true, result: result)
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permissionName)
                 break;
                 
             case .restricted, .denied, .notDetermined:
-                self.collectPermissionResult(isGranted: false, result: result)
+                self.collectPermissionResult(isGranted: false, result: result, permissionName: permissionName)
                 break;
                 
             default:
-                self.collectPermissionResult(isGranted: false, result: result)
+                self.collectPermissionResult(isGranted: false, result: result, permissionName: permissionName)
                 break
             }
         }
     }
     
-    public func microphonePermission(result: @escaping FlutterResult) -> Void {
+    public func microphonePermission(result: @escaping FlutterResult, permissionName: String) -> Void {
         AVCaptureDevice.requestAccess(for: AVMediaType.audio) { granted in
             if granted {
-                self.collectPermissionResult(isGranted: true, result: result)
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permissionName)
             } else {
-                self.collectPermissionResult(isGranted: false, result: result)
+                self.collectPermissionResult(isGranted: false, result: result, permissionName: permissionName)
             }
         }
     }
     
     
-    public func contactPermission(result: @escaping FlutterResult) -> Void {
+    public func contactPermission(result: @escaping FlutterResult, permissionName: String) -> Void {
         if #available(iOS 9.0, *) {
             CNContactStore().requestAccess(for: .contacts, completionHandler: { granted, error in
                 if (granted){
-                    self.collectPermissionResult(isGranted: true, result: result)
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permissionName)
                 } else {
-                    self.collectPermissionResult(isGranted: false, result: result)
+                    self.collectPermissionResult(isGranted: false, result: result, permissionName: permissionName)
                 }
             })
         }
     }
     
-    public func cameraPermission(result: @escaping FlutterResult) -> Void {
+    public func cameraPermission(result: @escaping FlutterResult, permissionName: String) -> Void {
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { granted in
             if granted {
-                self.collectPermissionResult(isGranted: true, result: result)
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permissionName)
             } else {
-                self.collectPermissionResult(isGranted: false, result: result)
+                self.collectPermissionResult(isGranted: false, result: result, permissionName: permissionName)
             }
+        }
+    }
+    
+    public func locationPermission(result: @escaping FlutterResult, permissionName: String) -> Void {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        dispatchGroup.enter()
+        
+        locationManager.requestAlwaysAuthorization()
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) {
+            
+            var permissionGranted = false
+            let status = CLLocationManager.authorizationStatus()
+            self.locationManager.delegate = nil
+            
+            switch (status) {
+            case .authorizedAlways, .authorizedWhenInUse:
+                permissionGranted = true
+                break
+            case .denied,.restricted:
+                permissionGranted = false
+                break
+            case .notDetermined:
+                permissionGranted = false
+                break
+            }
+            self.collectPermissionResult(isGranted: permissionGranted, result: result, permissionName: permissionName)
         }
     }
     
     public func requestSinglePermission(permission: String, result: @escaping FlutterResult) -> Void {
         if permission == "Storage" {
-            storagePermission(result: result)
+            storagePermission(result: result, permissionName: permission)
         } else if (permission == "Contact"){
-            contactPermission(result: result)
+            contactPermission(result: result, permissionName: permission)
         } else if (permission == "Camera"){
-            cameraPermission(result: result)
+            cameraPermission(result: result, permissionName: permission)
         } else if (permission == "Microphone"){
-            microphonePermission(result: result)
+            microphonePermission(result: result, permissionName: permission)
+        } else if (permission == "Location") {
+            locationPermission(result: result, permissionName: permission)
         }
     }
     
@@ -159,7 +203,22 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         } else if (permission == "Microphone") {
             let status = AVCaptureDevice.authorizationStatus(for: .audio)
             granted = status == AVAuthorizationStatus.authorized
-        } 
+        } else if (permission == "Location") {
+            let status = CLLocationManager.authorizationStatus()
+            granted = (status == .authorizedAlways || status == .authorizedWhenInUse)
+        }
         return granted ?? false
+    }
+    
+}
+
+extension SwiftPitPermissionPlugin: CLLocationManagerDelegate {
+    
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        if status != .notDetermined {
+            dispatchGroup.leave()
+        }
+        
     }
 }

@@ -9,7 +9,7 @@ This is Permission Plugin, that can use for requesting permission in IOS or Andr
 First, add `pit_permission` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ```
-pit_permission: ^0.0.1
+pit_permission: ^0.0.2
 ```
 
 ## Important
@@ -21,6 +21,7 @@ for using Camera = <uses-permission android:name="android.permission.CAMERA"/>
 for using Microphone = <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 for read Storage = <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 for read Contact = <uses-permission android:name="android.permission.READ_CONTACTS"/>
+for using Location = <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 ```
 
 And you must add this on info.plist for IOS
@@ -49,23 +50,31 @@ And you must add this on info.plist for IOS
  <string>${PRODUCT_NAME} Need To Access Your Contact</string>
 ```
 
+### For using location
+```
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>${PRODUCT_NAME} Need To Access Your Location</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>${PRODUCT_NAME} Need To Access Your Location</string>
+```
+
 ## Example for Check Permission
 ```
-bool isPermissionGranted = await PitPermission.checkPermission(PermissionName.Microphone);
+bool isPermissionGranted = await PitPermission.checkPermission(PermissionName.microphone);
 ```
 
 ## Example for Request Single Permission
 ```
-bool cameraGranted = await PitPermission.requestSinglePermission(PermissionName.Camera);
+bool cameraGranted = await PitPermission.requestSinglePermission(PermissionName.camera);
 ```
 
 ## Example for Request Permissions
 ```
  List<PermissionName> permissionNameList = [
-        PermissionName.Camera,
-        PermissionName.Microphone,
-        PermissionName.Contact,
-        PermissionName.Storage,
+        PermissionName.camera,
+        PermissionName.microphone,
+        PermissionName.contact,
+        PermissionName.storage,
       ];
 
  Map<PermissionName, bool> grantedList; = await PitPermission.requestPermissions(permissionNameList);

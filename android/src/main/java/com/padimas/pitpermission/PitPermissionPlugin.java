@@ -2,8 +2,7 @@ package com.padimas.pitpermission;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
+import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +127,10 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
 
             case "Microphone":
                 permission = Manifest.permission.RECORD_AUDIO;
+                break;
+
+            case "Location":
+                permission = Manifest.permission.ACCESS_FINE_LOCATION;
                 break;
         }
         return permission;

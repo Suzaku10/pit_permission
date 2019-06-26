@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Map<PermissionName, bool> grantedList;
   bool isPermissionGranted;
+  bool test;
 
   @override
   void initState() {
@@ -26,36 +27,15 @@ class _MyAppState extends State<MyApp> {
 
     try {
       permissionNameList = [
-        PermissionName.Camera,
-        PermissionName.Microphone,
-        PermissionName.Contact,
-        PermissionName.Storage,
+        PermissionName.camera,
+        PermissionName.microphone,
+        PermissionName.location,
+        PermissionName.contact,
+        PermissionName.storage,
       ];
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Microphone);
-      print("is Microphone Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Camera);
-      print("is Camera Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Contact);
-      print("is Contact Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Storage);
-      print("is Storage Permission Granted ? ${isPermissionGranted}");
 
       grantedList = await PitPermission.requestPermissions(permissionNameList);
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Microphone);
-      print("is Microphone Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Camera);
-      print("is Camera Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Contact);
-      print("is Contact Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Storage);
-      print("is Storage Permission Granted ? ${isPermissionGranted}");
     } on PlatformException {
       print("error");
     }

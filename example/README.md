@@ -28,35 +28,36 @@ class _MyAppState extends State<MyApp> {
 
     try {
       permissionNameList = [
-        PermissionName.Camera,
-        PermissionName.Microphone,
-        PermissionName.Contact,
-        PermissionName.Storage,
+        PermissionName.camera,
+        PermissionName.microphone,
+        PermissionName.location
+        PermissionName.contact,
+        PermissionName.storage,
       ];
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Microphone);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.microphone);
       print("is Microphone Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Camera);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.camera);
       print("is Camera Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Contact);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.contact);
       print("is Contact Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Storage);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.storage);
       print("is Storage Permission Granted ? ${isPermissionGranted}");
 
       grantedList = await PitPermission.requestPermissions(permissionNameList);
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Microphone);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.microphone);
       print("is Microphone Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Camera);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.camera);
       print("is Camera Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Contact);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.contact);
       print("is Contact Permission Granted ? ${isPermissionGranted}");
 
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.Storage);
+      isPermissionGranted = await PitPermission.checkPermission(PermissionName.storage);
       print("is Storage Permission Granted ? ${isPermissionGranted}");
     } on PlatformException {
       print("error");

@@ -34,6 +34,10 @@
     <string>${PRODUCT_NAME} Need To Access Your Camera</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>${PRODUCT_NAME} Need To Access Your Microphone</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>ssssssss</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>kkkkk</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

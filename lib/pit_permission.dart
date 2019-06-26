@@ -33,25 +33,29 @@ class PitPermission {
   }
 }
 
-enum PermissionName { Contact, Storage, Camera, Microphone }
+enum PermissionName { contact, storage, camera, microphone, location }
 
 String getPermissionString(PermissionName permissions) {
   String permissionString;
   switch (permissions) {
-    case PermissionName.Storage:
+    case PermissionName.storage:
       permissionString = "Storage";
       break;
 
-    case PermissionName.Contact:
+    case PermissionName.contact:
       permissionString = "Contact";
       break;
 
-    case PermissionName.Camera:
+    case PermissionName.camera:
       permissionString = "Camera";
       break;
 
-    case PermissionName.Microphone:
+    case PermissionName.microphone:
       permissionString = "Microphone";
+      break;
+
+    case PermissionName.location:
+      permissionString = "Location";
       break;
   }
   return permissionString;
