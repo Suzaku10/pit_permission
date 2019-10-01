@@ -32,10 +32,11 @@ class _MyAppState extends State<MyApp> {
         PermissionName.location,
         PermissionName.contact,
         PermissionName.storage,
+        PermissionName.phoneCall,
+        PermissionName.sms
       ];
 
       grantedList = await PitPermission.requestPermissions(permissionNameList);
-
     } on PlatformException {
       print("error");
     }

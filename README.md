@@ -9,7 +9,7 @@ This is Permission Plugin, that can use for requesting permission in IOS or Andr
 First, add `pit_permission` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ```
-pit_permission: ^0.0.2
+pit_permission: ^0.1.0
 ```
 
 ## Important
@@ -22,9 +22,13 @@ for using Microphone = <uses-permission android:name="android.permission.RECORD_
 for read Storage = <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 for read Contact = <uses-permission android:name="android.permission.READ_CONTACTS"/>
 for using Location = <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+for read SMS = <uses-permission android:name="android.permission.READ_SMS"/>
+for read Call Logs = <uses-permission android:name="android.permission.READ_CALL_LOG"/>
 ```
 
 And you must add this on info.plist for IOS
+
+*Note*: reqeust SMS and Call Logs in IOS always return true, but it doesn't functionally
 
 ### For using camera
 ```
@@ -75,6 +79,8 @@ bool cameraGranted = await PitPermission.requestSinglePermission(PermissionName.
         PermissionName.microphone,
         PermissionName.contact,
         PermissionName.storage,
+        PermissionName.phoneCall,
+        PermissionName.sms,
       ];
 
  Map<PermissionName, bool> grantedList; = await PitPermission.requestPermissions(permissionNameList);

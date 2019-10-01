@@ -2,6 +2,7 @@ package com.padimas.pitpermission;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
         ActivityCompat.requestPermissions(registrar.activity(), permissions, REQUEST_CODE_SINGLE_PERMISSION);
     }
 
-    public void requestPermissions(List<String> permissions){
+    public void requestPermissions(List<String> permissions) {
         String[] permissionList = new String[permissions.size()];
         for (int i = 0; i < permissions.size(); i++) {
             permissionList[i] = getPermissionString(permissions.get(i));
@@ -131,6 +132,14 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
 
             case "Location":
                 permission = Manifest.permission.ACCESS_FINE_LOCATION;
+                break;
+
+            case "PhoneCall":
+                permission = Manifest.permission.READ_CALL_LOG;
+                break;
+
+            case "Sms":
+                permission = Manifest.permission.READ_SMS;
                 break;
         }
         return permission;

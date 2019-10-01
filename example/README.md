@@ -16,6 +16,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Map<PermissionName, bool> grantedList;
   bool isPermissionGranted;
+  bool test;
 
   @override
   void initState() {
@@ -30,35 +31,14 @@ class _MyAppState extends State<MyApp> {
       permissionNameList = [
         PermissionName.camera,
         PermissionName.microphone,
-        PermissionName.location
+        PermissionName.location,
         PermissionName.contact,
         PermissionName.storage,
+        PermissionName.phoneCall,
+        PermissionName.sms
       ];
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.microphone);
-      print("is Microphone Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.camera);
-      print("is Camera Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.contact);
-      print("is Contact Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.storage);
-      print("is Storage Permission Granted ? ${isPermissionGranted}");
 
       grantedList = await PitPermission.requestPermissions(permissionNameList);
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.microphone);
-      print("is Microphone Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.camera);
-      print("is Camera Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.contact);
-      print("is Contact Permission Granted ? ${isPermissionGranted}");
-
-      isPermissionGranted = await PitPermission.checkPermission(PermissionName.storage);
-      print("is Storage Permission Granted ? ${isPermissionGranted}");
     } on PlatformException {
       print("error");
     }
@@ -82,5 +62,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 ```
 

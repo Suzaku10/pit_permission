@@ -1,3 +1,6 @@
+## 0.1.0
+* added READ_CALL_LOG and READ_SMS for android, Ios skiped and always return true for those permission
+
 ## 0.0.2
 
 * Support Location Permission
