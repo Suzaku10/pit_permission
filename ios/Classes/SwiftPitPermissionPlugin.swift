@@ -51,23 +51,48 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         for index in 0..<permissionLength {
             switch (permission[index]) {
             case "Contact":
-                contactPermission(result: result, permissionName: permission[index])
+                let isGranted = checkPermission(permission: permission[index])
+                if isGranted {
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                } else{
+                      contactPermission(result: result, permissionName: permission[index])
+                }
                 break
                 
             case "Storage":
-                storagePermission(result: result, permissionName: permission[index])
+                let isGranted = checkPermission(permission: permission[index])
+                if isGranted {
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                } else{
+                   storagePermission(result: result, permissionName: permission[index])
+                }
                 break
                 
             case "Camera":
-                cameraPermission(result: result, permissionName: permission[index])
+                let isGranted = checkPermission(permission: permission[index])
+                if isGranted {
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                } else{
+                     cameraPermission(result: result, permissionName: permission[index])
+                }
                 break
                 
             case "Microphone":
-                microphonePermission(result: result, permissionName: permission[index])
+                let isGranted = checkPermission(permission: permission[index])
+                if isGranted {
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                } else{
+                  microphonePermission(result: result, permissionName: permission[index])
+                }
                 break
                 
             case "Location":
-                locationPermission(result: result, permissionName: permission[index])
+                let isGranted = checkPermission(permission: permission[index])
+                if isGranted {
+                    self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                } else{
+                  locationPermission(result: result, permissionName: permission[index])
+                }
                 break
                 
             case "PhoneCall":
@@ -75,7 +100,7 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
                 break
             
             case "Sms" :
-                  self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
                 break
                 
             default:
@@ -98,7 +123,11 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         }
         
         if counter == permissionLength && isMultiplePermission! {
-            result(grantedList)
+            if grantedList.contains(false){
+                result(false)
+            } else {
+                result(true)
+            }
         }
     }
     
@@ -182,21 +211,27 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
     }
     
     public func requestSinglePermission(permission: String, result: @escaping FlutterResult) -> Void {
-        if permission == "Storage" {
-            storagePermission(result: result, permissionName: permission)
-        } else if (permission == "Contact"){
-            contactPermission(result: result, permissionName: permission)
-        } else if (permission == "Camera"){
-            cameraPermission(result: result, permissionName: permission)
-        } else if (permission == "Microphone"){
-            microphonePermission(result: result, permissionName: permission)
-        } else if (permission == "Location") {
-            locationPermission(result: result, permissionName: permission)
-        } else if(permission == "PhoneCall"){
-        self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
-        } else if(permission == "Sms"){
-            self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
+        let isGranted = checkPermission(permission: permission)
+        if !isGranted {
+            if permission == "Storage" {
+                storagePermission(result: result, permissionName: permission)
+            } else if (permission == "Contact"){
+                contactPermission(result: result, permissionName: permission)
+            } else if (permission == "Camera"){
+                cameraPermission(result: result, permissionName: permission)
+            } else if (permission == "Microphone"){
+                microphonePermission(result: result, permissionName: permission)
+            } else if (permission == "Location") {
+                locationPermission(result: result, permissionName: permission)
+            } else if(permission == "PhoneCall"){
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
+            } else if(permission == "Sms"){
+                self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
+            }
+        } else {
+             self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
         }
+       
     }
     
     public func checkPermission(permission: String) -> Bool {

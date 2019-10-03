@@ -2,6 +2,7 @@ package com.padimas.pitpermission;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
@@ -77,15 +78,28 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
 
     public void requestSinglePermission(String permission) {
         String[] permissions = {getPermissionString(permission)};
+        Boolean checkPermission = checkPermission(permission);
+        if (checkPermission) {
+            result.success(checkPermission);
+            return;
+        }
         ActivityCompat.requestPermissions(registrar.activity(), permissions, REQUEST_CODE_SINGLE_PERMISSION);
     }
 
     public void requestPermissions(List<String> permissions) {
-        String[] permissionList = new String[permissions.size()];
+        List<String> permissionList = new ArrayList<>();
         for (int i = 0; i < permissions.size(); i++) {
-            permissionList[i] = getPermissionString(permissions.get(i));
+            boolean checkPermission = checkPermission(permissions.get(i));
+            if (!checkPermission) {
+                permissionList.add(getPermissionString(permissions.get(i)));
+            }
         }
-        ActivityCompat.requestPermissions(registrar.activity(), permissionList, REQUEST_CODE_MULTIPLE_PERMISSION);
+        String[] permissionArray = permissionList.toArray(new String[0]);
+        if (permissionArray.length == 0) {
+            result.success(true);
+            return;
+        }
+        ActivityCompat.requestPermissions(registrar.activity(), permissionArray, REQUEST_CODE_MULTIPLE_PERMISSION);
     }
 
     @Override
@@ -105,7 +119,11 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
                     grantedList.add(false);
                 }
             }
-            result.success(grantedList);
+            if (grantedList.contains(false)) {
+                result.success(false);
+            } else {
+                result.success(true);
+            }
         }
         return false;
     }

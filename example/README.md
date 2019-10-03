@@ -14,9 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Map<PermissionName, bool> grantedList;
   bool isPermissionGranted;
-  bool test;
 
   @override
   void initState() {
@@ -25,10 +23,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> permissionRequest() async {
-    List<PermissionName> permissionNameList;
-
     try {
-      permissionNameList = [
+      List<PermissionName> permissionNameList = [
         PermissionName.camera,
         PermissionName.microphone,
         PermissionName.location,
@@ -38,7 +34,7 @@ class _MyAppState extends State<MyApp> {
         PermissionName.sms
       ];
 
-      grantedList = await PitPermission.requestPermissions(permissionNameList);
+      isPermissionGranted = await PitPermission.requestPermissions(permissionNameList);
     } on PlatformException {
       print("error");
     }
@@ -51,17 +47,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('PitPermission Plugin example app'),
-        ),
-        body: Center(
-          child: Text('result from grantedList: $grantedList\n'),
-        ),
-      ),
-    );
+        home: Scaffold(
+      appBar: AppBar(title: const Text('PitPermission Plugin example app')),
+      body: Center(child: Text("have all permission ? $isPermissionGranted")),
+    ));
   }
 }
-
 ```
 

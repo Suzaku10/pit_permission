@@ -9,7 +9,7 @@ This is Permission Plugin, that can use for requesting permission in IOS or Andr
 First, add `pit_permission` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ```
-pit_permission: ^0.1.0
+pit_permission: ^0.1.1
 ```
 
 ## Important
@@ -72,7 +72,22 @@ bool isPermissionGranted = await PitPermission.checkPermission(PermissionName.mi
 bool cameraGranted = await PitPermission.requestSinglePermission(PermissionName.camera);
 ```
 
-## Example for Request Permissions
+## Example for Request Permissions working on <= 0.1.0
+
+```
+ List<PermissionName> permissionNameList = [
+        PermissionName.camera,
+        PermissionName.microphone,
+        PermissionName.contact,
+        PermissionName.storage,
+        PermissionName.phoneCall,
+        PermissionName.sms,
+      ];
+
+ Map<PermissionName, bool> grantedList; = await PitPermission.requestPermissions(permissionNameList);
+```
+
+## Example for Request Permissions working on  0.1.1
 ```
  List<PermissionName> permissionNameList = [
         PermissionName.camera,

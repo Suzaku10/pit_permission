@@ -17,19 +17,14 @@ class PitPermission {
     return granted;
   }
 
-  static Future<Map<PermissionName, bool>> requestPermissions(List<PermissionName> permissionNameList) async {
+  static Future<bool> requestPermissions(List<PermissionName> permissionNameList) async {
     List<String> list = [];
     permissionNameList.forEach((p) {
       list.add(getPermissionString(p));
     });
 
-    List<bool> grantedList = List<bool>.from(await _channel.invokeMethod("requestPermissions", {"permissions": list}));
-    Map<PermissionName, bool> result = Map();
-    for (int i = 0; i < permissionNameList.length; i++) {
-      result.putIfAbsent(permissionNameList[i], () => grantedList[i]);
-    }
-
-    return result;
+    bool finalResult = await _channel.invokeMethod("requestPermissions", {"permissions": list});
+    return finalResult;
   }
 }
 
