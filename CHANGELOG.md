@@ -1,3 +1,6 @@
+## 0.1.3
+* Update to swift 4.2
+
 ## 0.1.2
 * add feature to check shouldShowRequestPermissionRationale, and feature to open app setting
 
