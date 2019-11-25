@@ -49,7 +49,7 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
     }
     
     public func openAppSettings(result: @escaping FlutterResult) -> Void{
-        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
             result(false)
             return
         }
