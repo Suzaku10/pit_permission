@@ -1,3 +1,6 @@
+## 0.1.2
+* add feature to check shouldShowRequestPermissionRationale, and feature to open app setting
+
 ## 0.1.1
 * requestPermissions now return bool, if 1 permission denied requestPermissions will return false
 

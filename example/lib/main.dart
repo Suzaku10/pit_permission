@@ -13,6 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isPermissionGranted;
+  bool isShowRequestPermissionRational;
 
   @override
   void initState() {
@@ -33,6 +34,12 @@ class _MyAppState extends State<MyApp> {
       ];
 
       isPermissionGranted = await PitPermission.requestPermissions(permissionNameList);
+      print(isPermissionGranted.toString());
+
+      if(!isPermissionGranted){
+        isShowRequestPermissionRational = await PitPermission.shouldShowRequestPermissionRationale(permissionNameList);
+        if(!isShowRequestPermissionRational) PitPermission.openAppSettings();
+      }
     } on PlatformException {
       print("error");
     }

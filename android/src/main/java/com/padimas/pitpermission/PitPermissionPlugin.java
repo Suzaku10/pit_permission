@@ -1,6 +1,9 @@
 package com.padimas.pitpermission;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
@@ -63,10 +66,66 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
                 this.result = result;
                 requestPermissions(permissions);
                 break;
-
+            case "shouldShowRequestPermissionRationale":
+                this.result = result;
+                List<String> permissionList = call.argument("permissions");
+                result.success(shouldShowRequestPermissionRationale(permissionList));
+                break;
+            case "openAppSettings":
+                boolean isOpen = openAppSettings();
+                result.success(isOpen);
+                break;
             default:
                 result.notImplemented();
                 break;
+        }
+    }
+
+    private boolean shouldShowRequestPermissionRationale(List<String> permissions) {
+        Activity activity = registrar.activity();
+        if (activity == null) {
+            Log.d("Permission", "Unable to detect current Activity.");
+            return false;
+        }
+        List<String> permissionList = new ArrayList<>();
+
+        for (String permission : permissions) {
+            Boolean checkPermission = checkPermission(permission);
+            if(!checkPermission){
+                String name = getPermissionString(permission);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, name))
+                    permissionList.add(permission);
+            }
+
+        }
+        if(permissionList.size()==0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean openAppSettings() {
+        final Context context = registrar.activity() == null ? registrar.activeContext() : registrar.activity();
+        if (context == null) {
+            Log.d("Permission", "Unable to detect current Activity or App Context.");
+            return false;
+        }
+
+        try {
+            Intent settingsIntent = new Intent();
+            settingsIntent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            settingsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            settingsIntent.setData(android.net.Uri.parse("package:" + context.getPackageName()));
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+
+            context.startActivity(settingsIntent);
+
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 

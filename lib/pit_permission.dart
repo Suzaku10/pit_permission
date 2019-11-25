@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 
@@ -25,6 +26,28 @@ class PitPermission {
 
     bool finalResult = await _channel.invokeMethod("requestPermissions", {"permissions": list});
     return finalResult;
+  }
+
+  static Future<bool> openAppSettings() async {
+    final bool hasOpened = await _channel.invokeMethod('openAppSettings');
+
+    return hasOpened;
+  }
+
+  static Future<bool> shouldShowRequestPermissionRationale(
+      List<PermissionName> permissionNameList) async {
+    if (!Platform.isAndroid) {
+      return false;
+    }
+
+    List<String> list = [];
+    permissionNameList.forEach((p) {
+      list.add(getPermissionString(p));
+    });
+
+    final bool shouldShowRationale = await _channel.invokeMethod(
+        'shouldShowRequestPermissionRationale', {"permissions": list});
+    return shouldShowRationale;
   }
 }
 

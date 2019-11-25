@@ -43,6 +43,29 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
             permissionLength = permissionList?.count
             grantedList = [Bool](repeating: false, count: permissionLength!)
             requestPermissions(permission: permissionList!, result: result)
+        } else if (call.method.elementsEqual("openAppSettings")){
+            openAppSettings(result: result)
+        }
+    }
+    
+    public func openAppSettings(result: @escaping FlutterResult) -> Void{
+        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+            result(false)
+            return
+        }
+        
+        if UIApplication.shared.canOpenURL(settingsUrl) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                    print("Settings opened: \(success)") // Prints true
+                    result(true)
+                })
+            } else if #available(iOS 8.0, *) {
+                UIApplication.shared.openURL(settingsUrl)
+                result(true)
+            } else {
+                result(false)
+            }
         }
     }
     
