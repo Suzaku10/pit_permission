@@ -49,9 +49,23 @@ class PitPermission {
         'shouldShowRequestPermissionRationale', {"permissions": list});
     return shouldShowRationale;
   }
+
+  static Future<List<String>> getdisablePermission(List<PermissionName> permissionNameList) async {
+    List<String> list = [];
+
+    await Future.forEach(permissionNameList,(p) async  {
+      bool permission = await checkPermission(p);
+      if(!permission)
+        list.add(getPermissionString(p));
+    });
+
+    return list;
+  }
 }
 
 enum PermissionName { contact, storage, camera, microphone, location, phoneCall, sms }
+
+
 
 String getPermissionString(PermissionName permissions) {
   String permissionString;
