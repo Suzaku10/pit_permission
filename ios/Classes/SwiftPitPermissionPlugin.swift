@@ -118,7 +118,7 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
                 }
                 break
                 
-            case "PhoneCall":
+            case "Call Logs":
                 self.collectPermissionResult(isGranted: true, result: result, permissionName: permission[index])
                 break
             
@@ -246,7 +246,7 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
                 microphonePermission(result: result, permissionName: permission)
             } else if (permission == "Location") {
                 locationPermission(result: result, permissionName: permission)
-            } else if(permission == "PhoneCall"){
+            } else if(permission == "Call Logs"){
                 self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
             } else if(permission == "Sms"){
                 self.collectPermissionResult(isGranted: true, result: result, permissionName: permission)
@@ -276,7 +276,7 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
         } else if (permission == "Location") {
             let status = CLLocationManager.authorizationStatus()
             granted = (status == .authorizedAlways || status == .authorizedWhenInUse)
-        } else if (permission == "PhoneCall") {
+        } else if (permission == "Call Logs") {
             granted = true;
         } else if (permission == "Sms") {
             granted = true;

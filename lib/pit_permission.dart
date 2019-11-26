@@ -91,7 +91,7 @@ String getPermissionString(PermissionName permissions) {
       break;
 
     case PermissionName.phoneCall:
-      permissionString = "PhoneCall";
+      permissionString = "Call Logs";
       break;
 
     case PermissionName.sms:

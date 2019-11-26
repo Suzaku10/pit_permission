@@ -211,7 +211,7 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
                 permission = Manifest.permission.ACCESS_FINE_LOCATION;
                 break;
 
-            case "PhoneCall":
+            case "Call Logs":
                 permission = Manifest.permission.READ_CALL_LOG;
                 break;
 

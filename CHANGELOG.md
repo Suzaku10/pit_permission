@@ -1,5 +1,8 @@
+## 0.1.5
+* Change permission string from 'PhoneCall' to 'Call Logs'
+
 ## 0.1.4
-add feature to get disable permission
+* add feature to get disable permission
 
 ## 0.1.3
 * Update to swift 4.2
