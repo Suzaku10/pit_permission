@@ -28,11 +28,13 @@ public class SwiftPitPermissionPlugin: NSObject, FlutterPlugin {
             result(granted)
         } else if (call.method.elementsEqual("requestSinglePermission")){
             permissionLength = 0
+            counter = 0
             isMultiplePermission = false
             let permission = call.arguments as? String
             requestSinglePermission(permission: permission ?? "Error", result: result)
         } else if (call.method.elementsEqual("requestPermissions")) {
             isMultiplePermission = true
+            counter = 0
             grantedList = [Bool]()
             permissionList = [String] ()
             let permissions = call.arguments as? Dictionary<String, [String]>
