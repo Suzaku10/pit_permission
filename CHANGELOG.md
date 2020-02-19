@@ -1,3 +1,7 @@
+## 0.1.7
+
+* fix get disable permission for ios
+
 ## 0.1.6
 
 * fix Request Permission counter in IOS

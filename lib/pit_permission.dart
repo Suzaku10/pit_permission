@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class PitPermission {
@@ -55,8 +56,13 @@ class PitPermission {
 
     await Future.forEach(permissionNameList,(p) async  {
       bool permission = await checkPermission(p);
-      if(!permission)
-        list.add(getPermissionString(p));
+      if(!permission){
+        String permission = getPermissionString(p);
+        if(Platform.isIOS && permission =="Storage")
+          permission = "Photos";
+        list.add(permission);
+      }
+
     });
 
     return list;

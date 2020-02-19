@@ -9,7 +9,7 @@ This is Permission Plugin, that can use for requesting permission in IOS or Andr
 First, add `pit_permission` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ```
-pit_permission: ^0.1.6
+pit_permission: ^0.1.7
 ```
 
 ## Important
