@@ -29,6 +29,7 @@ class _MyAppState extends State<MyApp> {
         PermissionName.location,
         PermissionName.contact,
         PermissionName.storage,
+        PermissionName.writeStorage,
         PermissionName.phoneCall,
         PermissionName.sms
       ];

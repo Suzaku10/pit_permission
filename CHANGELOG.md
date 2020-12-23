@@ -1,3 +1,7 @@
+## 0.1.8
+
+* Add Permission Write External Storage
+
 ## 0.1.7
 
 * fix get disable permission for ios

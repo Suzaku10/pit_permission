@@ -199,6 +199,10 @@ public class PitPermissionPlugin implements MethodCallHandler, PluginRegistry.Re
                 permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 break;
 
+            case "Write Storage":
+                permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                break;
+
             case "Camera":
                 permission = Manifest.permission.CAMERA;
                 break;
